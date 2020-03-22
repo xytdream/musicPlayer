@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>悦听Palyer</title>
+    <link rel="stylesheet" href="./css/index.css">
+</head>
+<body>
+    <div id="musicApp">
+        <div class="musicPlayer" v-show="isShowMusic">
+            <header>
+                <div class="logo">
+                    <img src="./images/player_title.png" alt="">
+                </div>
+                <div class="searchBox">
+                    <input type="text" v-model="query" @keyup.enter="searchMusic">
+                </div>
+            </header>
+            <main>
+                <!-- 歌曲列表 -->
+                <div class="song_wrapper" ref="song_wrapper">
+                    <ul class="songList">
+                        <li class="song" v-for="item in musicList">
+                            <a href="javascript:void(0)" @click="playMusic(item.id)"></a>
+                            <b>{{ item.name }}</b>
+                            <span v-if="item.mvid!=0" @click="playMV(item.mvid)">
+                                <i></i>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+                <!-- 歌曲信息容器 -->
+                <div class="player_con" :class="{playing:isPlay}">
+                    <!-- 指针 -->
+                    <img src="./images/player_bar.png" class="player_bar">
+                    <!-- 碟片 -->
+                    <img src="./images/disc.png" class="disc autoRotate">
+                    <!-- 歌曲封面 -->
+                    <img :src="coverUrl" alt="" class="cover autoRotate">
+                </div>
+                <!-- 评论 -->
+                <div class="comment_wrapper" ref="comment_wrapper">
+                    <h3>热门留言</h3>
+                    <div class="commentList">
+                        <dl class="comment" v-for="item in commentList">
+                            <dt><img :src="item.user.avatarUrl" alt="头像"></dt>
+                            <dd class="name">{{ item.user.nickname }}</dd>
+                            <dd class="detail">{{ item.content }}</dd>
+                        </dl>
+                    </div>
+                </div>
+            </main>
+            <footer>
+                <audio :src="musicUrl" ref='audio' @play="play" @pause="pause" controls autoplay loop class="myAudio"></audio>
+            </footer>
+        </div>
+        <!-- MV播放界面 -->
+        <div class="mvPlayer" v-show="isShowVideo">
+            <video :src="mvUrl" ref="video" controls autoplay class="mv"></video>
+            <button class="close" @click="close"><img src="./images/close1.png" alt=""></button>
+        </div>
+    </div>
+</body>
+<!-- 官网提供的 axios 在线地址 -->
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<!-- 引入VUE.JS开发环境版本，包含了有帮助的命令行警告 -->
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="./js/index.js"></script>
+</html>
